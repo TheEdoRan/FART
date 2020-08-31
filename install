@@ -53,12 +53,12 @@ dialog_box () {
 dialog_modules () {
   case "$1" in
     "base")
-      MODULES=("Base|on" "Intel|on" "AMD|off" "NVIDIA|on" "i3|on" "Fonts|on" \
-        "Printing|on" "UFW|on" "DNSCrypt|on" "Fish|on" "Tmux|on" "Neovim|on" \
-        "VS_Code|on" "Thunderbird|on" "Brave|on" "Firefox|on" "Chromium|off" \
-        "Adapta_Theme|on" "Breeze_Icons|off" "Papirus_Icons|on" "QEMU|on" \
-        "VirtualBox|off" "Authy|on" "Bitwarden|on" "Telegram|on" "Discord|on" \
-        "Krita|on" "GIMP|off" "Inkscape|on" "Olive|off" "Kdenlive|on" \
+      MODULES=("Base|on" "Intel|on" "AMD|off" "NVIDIA|on" "i3|off" "GNOME|off" \
+        "Fonts|on" "Printing|on" "UFW|on" "DNSCrypt|on" "Fish|on" "Tmux|on" \
+        "Neovim|on" "VS_Code|on" "Thunderbird|on" "Brave|on" "Firefox|off" \
+        "Chromium|off" "Adapta_Theme|on" "Breeze_Icons|off" "Papirus_Icons|on" \
+        "QEMU|off" "VirtualBox|off" "Authy|off" "Bitwarden|off" "Telegram|on" \
+        "Discord|on" "Krita|on" "GIMP|off" "Inkscape|off" "Kdenlive|off" \
         "Audacity|on" "Rhythmbox|on" "Spotify|on" "LibreOffice|on")
       ;;
     "laptop")
@@ -252,12 +252,18 @@ i3 () {
   sudo sed -i 's/^#greeter-session=example-gtk-gnome/greeter-session=lightm-slick-greeter/' /etc/lightm/lightdm.conf
 }
 
+gnome () {
+  pms gnome gnome-tweaks dconf-editor chrome-gnome-shell
+
+  sudo systemctl enable gdm
+}
+
 fonts () {
   pms ttf-opensans ttf-bitstream-vera ttf-croscore ttf-font-awesome ttf-hack \
       ttf-liberation ttf-ubuntu-font-family cantarell-fonts noto-fonts \
       noto-fonts-cjk noto-fonts-emoji
 
-  yys ttf-nerd-fonts-hack
+  yys nerd-fonts-hack
 
   sudo fc-cache -f
 }
@@ -367,10 +373,6 @@ gimp () {
 
 inkscape () {
   pms inkscape
-}
-
-olive () {
-  yys olive olive-community-effects-git
 }
 
 kdenlive () {
