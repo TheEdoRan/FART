@@ -1,9 +1,22 @@
-# Fastest Arch Real Timesaver Installer
+# Arch, Stupid Simple Installer
 
-## Installation
+## Auto-install
+
+On a (preferably) freshly installed system, run:
+
+```
+curl -sL bit.ly/fart-installer | bash
+```
+
+<hr>
+
+### Cloning repository
 
 Clone the repo and execute `./install`.
 
 <hr>
 
-### W.I.P.
+### Requirements
+
+In order to run the installer, you need to be connected to the internet, via
+cable or Wi-Fi.
