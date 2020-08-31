@@ -1,4 +1,4 @@
-# Arch, Stupid Simple Installer
+# Fastest Arch Real Timesaver Installer
 
 ## Auto-install
 
