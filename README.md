@@ -20,3 +20,7 @@ Clone the repo and execute `./install`.
 
 In order to run the installer, you need to be connected to the internet, via
 cable or Wi-Fi.
+
+#### Linked projects
+
+See also [ASS Installer](https://github.com/theedoran/ASS).
