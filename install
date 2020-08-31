@@ -6,7 +6,7 @@
 ##################################
 
 
-TITLE="Arch Linux post-install"
+TITLE="Fastest Arch Real Timesaver Installer"
 
 # Colors
 NC='\033[0m'
@@ -142,10 +142,11 @@ dialog_modules "base"
 if [ "$(hostnamectl | grep 'Chassis' | sed 's/.*:\s//')" == "laptop" ]; then
   dialog_box --yesno "\nA laptop was detected. Do you want to install laptop \
 specific packages?"
+
+  # Check output for previous command, display package list accordingly.
+  [ "$?" == 0 ] && dialog_modules "laptop"
 fi
 
-# Check output for previous command, display package list accordingly.
-[ "$?" == 0 ] && dialog_modules "laptop"
 
 # Convert install packages to lowercase, to match name of functions.
 INSTALL_MODULES=$(awk '{print tolower($0)}' <<< "${INSTALL_MODULES}")
@@ -218,8 +219,6 @@ base () {
       libmpeg2 xvidcore libtheora libvpx git wget curl playerctl youtube-dl \
       gnome-disk-utility trash-cli transmission-gtk rsync ripgrep fzf cronie \
       exa bat imagemagick xdotool wmctrl lm_sensors pkgfile xclip
-
-  yys gst-plugin-libde265
 
   # Sync clock.
   sudo hwclock --systohc
