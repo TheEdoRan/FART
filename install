@@ -219,7 +219,7 @@ base () {
       fdkaac jasper libwebp aom dav1d schroedinger libdv x265 libde265 x264 \
       libmpeg2 xvidcore libtheora libvpx git wget curl playerctl youtube-dl \
       gnome-disk-utility trash-cli transmission-gtk rsync ripgrep fzf cronie \
-      exa bat imagemagick xdotool wmctrl lm_sensors pkgfile xclip
+      exa bat imagemagick xdotool wmctrl lm_sensors pkgfile xclip python-pip
 
   # Sync clock.
   sudo hwclock --systohc
