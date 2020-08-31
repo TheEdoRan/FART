@@ -126,9 +126,9 @@ dialog_locale () {
 
 
 # Welcome box.
-dialog_box --msgbox "\nWelcome to Arch Linux post-installation script.\n\n\
-In the next steps, you'll need to select which packages you want to install \
-for your system.\n\nBe careful and enjoy your awesome Arch universe!"
+dialog_box --msgbox "\nWelcome to FART, the one and only Fastest Arch Real \
+Timesaver installer.\n\nIn the next steps, you'll need to select which packages \
+you want to install for your system."
 
 # Ask for yay installation.
 dialog_box --yesno "\nDo you want to install yay, for easier AUR management?"
