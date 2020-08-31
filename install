@@ -239,15 +239,17 @@ nvidia () {
 }
 
 i3 () {
-  pms i3-gaps i3blocks i3lock-color xorg-xrdb python-i3ipc picom arandr feh \
-      eog mpv brightnessctl redshift pcmanfm flameshot lightdm light-locker \
-      lxappearance-gtk3 qt5ct kvantum-qt5 lxqt-policykit gnome-keyring \
-      network-manager-applet python-pyxdg xdo inotify-tools xarchiver kitty \
-      kitty-terminfo
+  pms i3-gaps i3blocks i3status i3lock-color xorg-xrdb python-i3ipc picom arandr \
+      feh eog mpv brightnessctl redshift pcmanfm flameshot lightdm \
+      light-locker lxappearance-gtk3 qt5ct kvantum-qt5 lxqt-policykit \
+      gnome-keyring network-manager-applet python-pyxdg xdo inotify-tools \
+      xarchiver kitty kitty-terminfo
 
   yys lightdm-slick-greeter dunst-git autotiling menu-calc
 
   sudo systemctl enable lightdm
+
+  sudo sed -i 's/^#greeter-session=example-gtk-gnome/greeter-session=lightm-slick-greeter/' /etc/lightm/lightdm.conf
 }
 
 fonts () {
@@ -291,10 +293,10 @@ tmux () {
 }
 
 neovim () {
-  pms neovim python-pynvim nodejs python python2 ctags bash-language-server \
+  pms neovim python-pynvim nodejs npm python ctags bash-language-server \
       jdk-openjdk jre-openjdk ripgrep
 
-  yys nodejs-neovim python2-pynvim
+  yys nodejs-neovim
 
   # pnpm install.
   curl -L https://raw.githubusercontent.com/pnpm/self-installer/master/install.js | node
