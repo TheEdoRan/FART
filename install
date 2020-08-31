@@ -1,0 +1,447 @@
+#!/usr/bin/env bash
+
+
+##################################
+#              INIT              #
+##################################
+
+
+TITLE="Arch Linux post-install"
+
+# Colors
+NC='\033[0m'
+CYAN='\033[0;36m'
+RED='\033[0;31m'
+
+# Expand aliases in script.
+shopt -s expand_aliases
+
+# Setup pacman and yay aliases.
+alias pms='sudo pacman -S --needed --noconfirm'
+alias yys='yay -S --needed --noconfirm --sudoloop'
+
+# Check if dialog is installed on the system.
+if [ ! -x "$(command -v dialog)" ]; then
+  echo 'dialog not found. Proceeding to install it.'
+  pms dialog
+fi
+
+# Init global variables.
+INSTALL_MODULES=""
+INSTALL_YAY=true
+
+###################################
+#              UTILS              #
+###################################
+
+
+# Exit the script
+exit_script () {
+  clear && echo -e "${RED}Script terminated before finish.${NC}" && exit 1
+}
+
+# Check if user wants to exit before finish.
+trap exit_script INT
+
+# Dialog util.
+dialog_box () {
+  dialog --title "${TITLE}" "$@" 0 0
+}
+
+# $1: context.
+dialog_modules () {
+  case "$1" in
+    "base")
+      MODULES=("Base|on" "Intel|on" "AMD|off" "NVIDIA|on" "i3|on" "Fonts|on" \
+        "Printing|on" "UFW|on" "DNSCrypt|on" "Fish|on" "Tmux|on" "Neovim|on" \
+        "VS_Code|on" "Thunderbird|on" "Brave|on" "Firefox|on" "Chromium|off" \
+        "Adapta_Theme|on" "Breeze_Icons|off" "Papirus_Icons|on" "QEMU|on" \
+        "VirtualBox|off" "Authy|on" "Bitwarden|on" "Telegram|on" "Discord|on" \
+        "Krita|on" "GIMP|off" "Inkscape|on" "Olive|off" "Kdenlive|on" \
+        "Audacity|on" "Rhythmbox|on" "Spotify|on" "LibreOffice|on")
+      ;;
+    "laptop")
+      MODULES=("NVIDIA_Prime|on" "TLP|on" "Intel_Undervolt|on" "Libinput_Gestures|on")
+      ;;
+  esac
+
+  # Array containing arguments for dialog checklist.
+  local ARGS=()
+
+  for m in "${MODULES[@]}"; do
+    # Get module name.
+    local module=$(echo "$m" | sed -E 's/\|.*$//')
+
+    # Get status (on|off).
+    local status=$(echo "$m" | sed -E 's/^.*\|//')
+
+    ARGS+=("$module" "" "$status")
+  done
+
+  # Build checklist and store results in variable.
+  exec 3>&1
+
+  INSTALL_MODULES+=" $(dialog --checklist 'Select packages to install:' \
+                      0 0 0 "${ARGS[@]}" 2>&1 1>&3)"
+
+  # If exit code of checklist isn't 0, exit the script.
+  [ "$?" != 0 ] && exit_script
+
+  exec 3>&-
+}
+
+# $1: package name
+# $2: select options array.
+dialog_locale () {
+  # Get pkg name.
+  local NAME=$1
+
+  # Shift first element of params.
+  shift
+
+  # Array containing options for dialog radiolist.
+  local ARGS=()
+
+  for m in "$@"; do
+    ARGS+=("$m" "" off)
+  done
+
+  exec 3>&1
+
+  # Build radiolist and store results in variable.
+  INSTALL_MODULES+=" $(dialog --radiolist "Select locale package for ${NAME}:" \
+    0 0 0 "${ARGS[@]}" 2>&1 1>&3)"
+
+  # If exit code of checklist isn't 0, exit the script.
+  [ "$?" != 0 ] && exit_script
+
+  exec 3>&-
+}
+
+
+###################################
+#           PRE-INSTALL           #
+###################################
+
+
+# Welcome box.
+dialog_box --msgbox "\nWelcome to Arch Linux post-installation script.\n\n\
+In the next steps, you'll need to select which packages you want to install \
+for your system.\n\nBe careful and enjoy your awesome Arch universe!"
+
+# Ask for yay installation.
+dialog_box --yesno "\nDo you want to install yay, for easier AUR management?"
+
+# Check output for previous command, set yay installation variable accordingly.
+[ "$?" == 1 ] && INSTALL_YAY=false
+
+# Show checklist for base modules.
+dialog_modules "base"
+
+# Check if the computer is a laptop.
+if [ "$(hostnamectl | grep 'Chassis' | sed 's/.*:\s//')" == "laptop" ]; then
+  dialog_box --yesno "\nA laptop was detected. Do you want to install laptop \
+specific packages?"
+fi
+
+# Check output for previous command, display package list accordingly.
+[ "$?" == 0 ] && dialog_modules "laptop"
+
+# Convert install packages to lowercase, to match name of functions.
+INSTALL_MODULES=$(awk '{print tolower($0)}' <<< "${INSTALL_MODULES}")
+
+# LOCALE SPECIFIC PACKAGES
+
+# Check if Firefox is in modules to install.
+if [[ "${INSTALL_MODULES}" == *"firefox"* ]]; then
+  # Search locale packages for Firefox.
+  IFS=$'\n' read -rd '' -a LOCALES <<< $(pacman -Ssq firefox-i18n-)
+
+  dialog_locale "Firefox" "${LOCALES[@]}"
+fi
+
+# Check if Thunderbird is in modules to install.
+if [[ "${INSTALL_MODULES}" == *"thunderbird"* ]]; then
+  # Search locale packages for Thunderbird.
+  IFS=$'\n' read -rd '' -a LOCALES <<< $(pacman -Ssq thunderbird-i18n-)
+
+  dialog_locale "Thunderbird" "${LOCALES[@]}"
+fi
+
+# Check if LibreOffice is in modules to install.
+if [[ "${INSTALL_MODULES[@]}" =~ "libreoffice" ]]; then
+  # Search locale packages for LibreOffice.
+  IFS=$'\n' read -rd '' -a LOCALES <<< $(pacman -Ssq libreoffice-fresh-)
+
+  dialog_locale "LibreOffice" "${LOCALES[@]}"
+fi
+
+# Clear the screen in preparation to installation.
+clear
+
+# If no packages selected, exit the script.
+[ -z "${INSTALL_MODULES}" ] && echo "Nothing to do. Bye bye." && exit 0
+
+# Rank mirrors.
+echo "Installing reflector to rank mirrors."
+
+pms reflector
+sudo cp /etc/pacman.d/mirrorlist{,.old}
+sudo reflector --verbose --sort rate --protocol https --age 12 \
+  --save /etc/pacman.d/mirrorlist
+
+# Ensure keyring is updated.
+sudo pacman -Syy archlinux-keyring --noconfirm
+
+# Run upgrade, just in case.
+sudo pacman -Syu
+
+
+###################################
+#             MODULES             #
+###################################
+
+
+########## BASE ##########
+
+
+base () {
+  pms bash-completion pacman-contrib xorg xorg-xinit xorg-xrandr xorg-xset \
+      autorandr xsettingsd htop libinput xdg-utils xdg-user-dirs alsa \
+      alsa-utils pulseaudio pulseaudio-alsa accountsservice ntfs-3g \
+      libdbusmenu-gtk2 libdbusmenu-gtk3 libdbusmenu-qt5 libcanberra \
+      libcanberra-gstreamer libcanberra-pulse samba p7zip unrar \
+      unzip zip gstreamer gst-{libav,plugins-{bad,base,good,ugly}} \
+      gstreamer-vaapi neofetch lame twolame flac wavpack celt a52dec libdca \
+      libmad libmpcdec opencore-amr speex libvorbis faac faad2 libfdk-aac \
+      fdkaac jasper libwebp aom dav1d schroedinger libdv x265 libde265 x264 \
+      libmpeg2 xvidcore libtheora libvpx git wget curl playerctl youtube-dl \
+      gnome-disk-utility trash-cli transmission-gtk rsync ripgrep fzf cronie \
+      exa bat imagemagick xdotool wmctrl lm_sensors pkgfile xclip
+
+  yys gst-plugin-libde265
+
+  # Sync clock.
+  sudo hwclock --systohc
+  sudo timedatectl set-ntp true
+}
+
+intel () {
+  pms intel-media-driver vulkan-intel
+}
+
+amd () {
+  pms mesa libva-mesa-driver mesa-vdpau vulkan-radeon
+}
+
+nvidia () {
+  pms nvidia nvidia-utils nvidia-settings
+}
+
+i3 () {
+  pms i3-gaps i3blocks i3lock-color xorg-xrdb python-i3ipc picom arandr feh \
+      eog mpv brightnessctl redshift pcmanfm flameshot lightdm light-locker \
+      lxappearance-gtk3 qt5ct kvantum-qt5 lxqt-policykit gnome-keyring \
+      network-manager-applet python-pyxdg xdo inotify-tools xarchiver kitty \
+      kitty-terminfo
+
+  yys lightdm-slick-greeter dunst-git autotiling menu-calc
+
+  sudo systemctl enable lightdm
+}
+
+fonts () {
+  pms ttf-opensans ttf-bitstream-vera ttf-croscore ttf-font-awesome ttf-hack \
+      ttf-liberation ttf-ubuntu-font-family cantarell-fonts noto-fonts \
+      noto-fonts-cjk noto-fonts-emoji
+
+  yys ttf-nerd-fonts-hack
+
+  sudo fc-cache -f
+}
+
+printing () {
+  pms cups cups-filters cups-pdf ghostscript gsfonts foomatic-db-engine \
+      foomatic-db-ppds foomatic-db-nonfree-ppds gutenprint \
+      foomatic-db-gutenprint-ppds
+
+  yys epson-inkjet-printer-escpr epson-inkjet-printer-escpr2
+
+  sudo systemctl enable org.cups.cupsd
+}
+
+ufw () {
+  pms ufw
+
+  sudo systemctl enable ufw
+}
+
+dnscrypt () {
+  pms dnscrypt-proxy
+
+  sudo systemctl enable dnscrypt-proxy
+}
+
+fish () {
+  pms fish
+}
+
+tmux () {
+  pms tmux
+}
+
+neovim () {
+  pms neovim python-pynvim nodejs python python2 ctags bash-language-server \
+      jdk-openjdk jre-openjdk ripgrep
+
+  yys nodejs-neovim python2-pynvim
+
+  # pnpm install.
+  curl -L https://raw.githubusercontent.com/pnpm/self-installer/master/install.js | node
+}
+
+vs_code () {
+  pms code
+}
+
+thunderbird () {
+  pms thunderbird
+}
+
+brave () {
+  yys brave-bin
+}
+
+firefox () {
+  pms firefox
+}
+
+chromium () {
+  pms chromium
+}
+
+adapta_theme () {
+  pms adapta-gtk-theme
+}
+
+papirus_icons () {
+  pms papirus-icon-theme
+}
+
+qemu () {
+  pms libvirt qemu qemu-arch-extra qemu-block-gluster qemu-block-iscsi \
+      qemu-block-rbd ovmf virt-manager dnsmasq ebtables dmidecode
+
+  sudo systemctl enable libvirtd
+}
+
+virtualbox () {
+  pms virtualbox virtualbox-guest-iso virtualbox-host-dkms
+}
+
+authy () {
+  yys authy-snap
+}
+
+bitwarden () {
+  yys bitwarden-bin
+}
+
+telegram () {
+  pms telegram-desktop
+}
+
+discord () {
+  pms discord
+}
+
+krita () {
+  pms krita
+}
+
+gimp () {
+  pms gimp
+}
+
+inkscape () {
+  pms inkscape
+}
+
+olive () {
+  yys olive olive-community-effects-git
+}
+
+kdenlive () {
+  pms kdenlive ffmpeg opencv
+}
+
+audacity () {
+  pms audacity
+}
+
+rhythmbox () {
+  pms rhythmbox
+}
+
+spotify () {
+  yys spotify-dev
+}
+
+libreoffice () {
+  pms libreoffice-fresh
+}
+
+
+########## LAPTOP ##########
+
+
+nvidia_prime () {
+  pms nvidia-prime
+}
+
+tlp () {
+  pms tlp
+
+  sudo systemctl enable tlp
+  sudo tlp start
+}
+
+intel_undervolt () {
+  yys intel-undervolt
+
+  sudo systemctl enable intel-undervolt
+}
+
+libinput_gestures () {
+  yys libinput-gestures
+
+  # Add user to INPUT group.
+  sudo gpasswd -a $USER input
+}
+
+
+###################################
+#             INSTALL             #
+###################################
+
+
+# Starting the installation.
+echo -e "Starting ${CYAN}Arch Linux${NC} post-installation!"
+
+sleep 2
+
+# Install yay, if user wants it and if not found on the system.
+[ "${INSTALL_YAY}" = true ] && [ ! -x "$(command -v yay)" ] \
+  && pms git && git clone https://aur.archlinux.org/yay.git && cd yay/ \
+  && makepkg -si --noconfirm && cd .. && rm -rf yay/
+
+# Convert to array.
+INSTALL_MODULES=(${INSTALL_MODULES})
+
+# Proceed to install user selected packages.
+for module in "${INSTALL_MODULES[@]}"; do
+  eval "$module"
+done
+
+# Finished installing.
+echo -e "\nFinished ${CYAN}Arch Linux${NC} post-installation!"
