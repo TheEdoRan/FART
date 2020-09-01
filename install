@@ -459,7 +459,7 @@ for module in "${INSTALL_MODULES[@]}"; do
 done
 
 # Proceed to install locale packages.
-pms "$LOCALE_MODULES"
+pms $(echo "$LOCALE_MODULES" | xargs)
 
 # Finished installing.
 echo -e "\nFinished ${CYAN}Arch Linux${NC} post-installation!"
