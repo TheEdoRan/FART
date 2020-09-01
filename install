@@ -17,8 +17,21 @@ RED='\033[0;31m'
 shopt -s expand_aliases
 
 # Setup pacman and yay aliases.
-alias pms='sudo pacman -S --needed --noconfirm'
+alias pms='pacman -S --needed --noconfirm'
 alias yys='yay -S --needed --noconfirm --sudoloop'
+
+# Check if root launched the script.
+if [ "$EUID" -ne 0 ]; then
+  echo "You need to run this script with sudo. Exiting."
+
+  exit 1
+fi
+
+# Check if dialog is installed on the system.
+if [ ! -x "$(command -v dialog)" ]; then
+  echo 'dialog not found. Proceeding to install it.'
+  pms dialog
+fi
 
 # Init global variables.
 INSTALL_MODULES=""
@@ -39,21 +52,6 @@ exit_script () {
 # Check if user wants to exit before finish.
 trap exit_script INT TERM
 trap "kill 0" EXIT
-
-# Sudo loop.
-sudo -v
-
-while true; do
-  sleep 60
-  sudo -n true
-  kill -0 \"$$\" || exit
-done 2>/dev/null &
-
-# Check if dialog is installed on the system.
-if [ ! -x "$(command -v dialog)" ]; then
-  echo 'dialog not found. Proceeding to install it.'
-  pms dialog
-fi
 
 # Dialog util.
 dialog_box () {
@@ -199,15 +197,15 @@ clear
 echo "Installing reflector to rank mirrors."
 
 pms reflector
-sudo cp /etc/pacman.d/mirrorlist{,.old}
-sudo reflector --verbose --sort rate --protocol https --age 12 \
+cp /etc/pacman.d/mirrorlist{,.old}
+reflector --verbose --sort rate --protocol https --age 12 \
   --save /etc/pacman.d/mirrorlist
 
 # Ensure keyring is updated.
-sudo pacman -Syy archlinux-keyring --noconfirm
+pacman -Syy archlinux-keyring --noconfirm
 
 # Run upgrade, just in case.
-sudo pacman -Syu --noconfirm
+pacman -Syu --noconfirm
 
 
 ###################################
@@ -233,8 +231,8 @@ base () {
       exa bat imagemagick xdotool wmctrl lm_sensors pkgfile xclip python-pip
 
   # Sync clock.
-  sudo hwclock --systohc
-  sudo timedatectl set-ntp true
+  hwclock --systohc
+  timedatectl set-ntp true
 }
 
 intel () {
@@ -258,15 +256,15 @@ i3 () {
 
   yys lightdm-slick-greeter dunst-git autotiling menu-calc
 
-  sudo systemctl enable lightdm
+  systemctl enable lightdm
 
-  sudo sed -i 's/^#greeter-session=example-gtk-gnome/greeter-session=lightm-slick-greeter/' /etc/lightm/lightdm.conf
+  sed -i 's/^#greeter-session=example-gtk-gnome/greeter-session=lightm-slick-greeter/' /etc/lightm/lightdm.conf
 }
 
 gnome () {
   pms gnome gnome-tweaks dconf-editor chrome-gnome-shell
 
-  sudo systemctl enable gdm
+  systemctl enable gdm
 }
 
 kde_plasma () {
@@ -274,7 +272,7 @@ kde_plasma () {
     dolphin dolphin-plugins gwenview kamoso kdeconnect okular yakuake \
     breeze breeze-gtk breeze-icons
 
-  sudo systemctl enable sddm
+  systemctl enable sddm
 }
 
 fonts () {
@@ -284,7 +282,7 @@ fonts () {
 
   yys nerd-fonts-hack
 
-  sudo fc-cache -f
+  fc-cache -f
 }
 
 printing () {
@@ -294,19 +292,19 @@ printing () {
 
   yys epson-inkjet-printer-escpr epson-inkjet-printer-escpr2
 
-  sudo systemctl enable org.cups.cupsd
+  systemctl enable org.cups.cupsd
 }
 
 ufw () {
   pms ufw
 
-  sudo systemctl enable ufw
+  systemctl enable ufw
 }
 
 dnscrypt () {
   pms dnscrypt-proxy
 
-  sudo systemctl enable dnscrypt-proxy
+  systemctl enable dnscrypt-proxy
 }
 
 fish () {
@@ -359,8 +357,8 @@ qemu () {
   pms libvirt qemu qemu-arch-extra qemu-block-gluster qemu-block-iscsi \
       qemu-block-rbd ovmf virt-manager dnsmasq ebtables dmidecode
 
-  sudo systemctl enable libvirtd
-  sudo gpasswd -a $USER libvirt
+  systemctl enable libvirtd
+  gpasswd -a $SUDO_USER libvirt
 }
 
 virtualbox () {
@@ -426,21 +424,21 @@ nvidia_prime () {
 tlp () {
   pms tlp
 
-  sudo systemctl enable tlp
-  sudo tlp start
+  systemctl enable tlp
+  tlp start
 }
 
 intel_undervolt () {
   yys intel-undervolt
 
-  sudo systemctl enable intel-undervolt
+  systemctl enable intel-undervolt
 }
 
 libinput_gestures () {
   yys libinput-gestures
 
   # Add user to INPUT group.
-  sudo gpasswd -a $USER input
+  gpasswd -a $SUDO_USER input
 }
 
 
