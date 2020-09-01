@@ -54,12 +54,13 @@ dialog_modules () {
   case "$1" in
     "base")
       MODULES=("Base|on" "Intel|on" "AMD|off" "NVIDIA|on" "i3|off" "GNOME|off" \
-        "Fonts|on" "Printing|on" "UFW|on" "DNSCrypt|on" "Fish|on" "Tmux|on" \
-        "Neovim|on" "VS_Code|on" "Thunderbird|on" "Brave|on" "Firefox|off" \
-        "Chromium|off" "Adapta_Theme|on" "Breeze_Icons|off" "Papirus_Icons|on" \
-        "QEMU|off" "VirtualBox|off" "Authy|off" "Bitwarden|off" "Telegram|on" \
-        "Discord|on" "Krita|on" "GIMP|off" "Inkscape|off" "Kdenlive|off" \
-        "Audacity|on" "Rhythmbox|on" "Spotify|on" "LibreOffice|on")
+        "KDE_Plasma|off" "Fonts|on" "Printing|on" "UFW|on" "DNSCrypt|on" \
+        "Fish|on" "Tmux|on" "Neovim|on" "VS_Code|on" "Thunderbird|on" "Brave|on" \
+        "Firefox|off" "Chromium|off" "Adapta_Theme|on" "Breeze_Icons|off" \
+        "Papirus_Icons|on" "QEMU|off" "VirtualBox|off" "Authy|off" \
+        "Bitwarden|off" "Telegram|on" "Discord|on" "Krita|on" "GIMP|off" \
+        "Inkscape|off" "Kdenlive|off" "Audacity|on" "Rhythmbox|on" "Spotify|on" \
+        "LibreOffice|on")
       ;;
     "laptop")
       MODULES=("NVIDIA_Prime|on" "TLP|on" "Intel_Undervolt|on" "Libinput_Gestures|on")
@@ -256,6 +257,13 @@ gnome () {
   pms gnome gnome-tweaks dconf-editor chrome-gnome-shell
 
   sudo systemctl enable gdm
+}
+
+kde_plasma () {
+  pms sddm plasma powerdevil konsole kate kcalc kio kio-extras kio-gdrive ark \
+    dolphin dolphin-plugins gwenview kamoso kdeconnect okular yakuake
+
+  sudo systemctl enable sddm
 }
 
 fonts () {
