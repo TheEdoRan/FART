@@ -42,12 +42,12 @@ trap "kill 0" EXIT
 
 # Sudo loop.
 sudo -v
-sleep 1
+
 while true; do
-  sleep 300
+  sleep 60
   sudo -n true
-  kill -0 "$$" 2>/dev/null | exit
-done &
+  kill -0 \"$$\" || exit
+done 2>/dev/null &
 
 # Check if dialog is installed on the system.
 if [ ! -x "$(command -v dialog)" ]; then
@@ -67,11 +67,10 @@ dialog_modules () {
       MODULES=("Base|on" "Intel|on" "AMD|off" "NVIDIA|on" "i3|off" "GNOME|off" \
         "KDE_Plasma|off" "Fonts|on" "Printing|on" "UFW|on" "DNSCrypt|on" \
         "Fish|on" "Tmux|on" "Neovim|on" "VS_Code|on" "Thunderbird|on" "Brave|on" \
-        "Firefox|off" "Chromium|off" "Adapta_Theme|on" "Breeze_Icons|off" \
-        "Papirus_Icons|on" "QEMU|off" "VirtualBox|off" "Authy|off" \
-        "Bitwarden|off" "Telegram|on" "Discord|on" "Krita|on" "GIMP|off" \
-        "Inkscape|off" "Kdenlive|off" "Audacity|on" "Rhythmbox|on" "Spotify|on" \
-        "LibreOffice|on")
+        "Firefox|off" "Chromium|off" "Adapta_Theme|on" "Papirus_Icons|on" \
+        "QEMU|off" "VirtualBox|off" "Authy|off" "Bitwarden|off" "Telegram|on" \
+        "Discord|on" "Krita|on" "GIMP|off" "Inkscape|off" "Kdenlive|off" \
+        "Audacity|on" "Rhythmbox|on" "Spotify|on" "LibreOffice|on")
       ;;
     "laptop")
       MODULES=("NVIDIA_Prime|on" "TLP|on" "Intel_Undervolt|on" "Libinput_Gestures|on")
