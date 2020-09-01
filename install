@@ -37,8 +37,7 @@ exit_script () {
 }
 
 # Check if user wants to exit before finish.
-trap exit_script INT TERM
-trap "kill 0" EXIT
+trap exit_script INT
 
 # Sudo loop.
 sudo -v
@@ -459,13 +458,8 @@ for module in "${INSTALL_MODULES[@]}"; do
   eval "$module"
 done
 
-# Convert to array.
-LOCALE_MODULES=($LOCALE_MODULES)
-
 # Proceed to install locale packages.
-for module in "${LOCALE_MODULES[@]}"; do
-  pms $module
-done
+pms "$LOCALE_MODULES"
 
 # Finished installing.
 echo -e "\nFinished ${CYAN}Arch Linux${NC} post-installation!"
