@@ -350,6 +350,7 @@ qemu () {
       qemu-block-rbd ovmf virt-manager dnsmasq ebtables dmidecode
 
   sudo systemctl enable libvirtd
+  sudo gpasswd -a $USER libvirt
 }
 
 virtualbox () {
