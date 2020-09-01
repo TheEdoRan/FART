@@ -42,7 +42,16 @@ exit_script () {
 }
 
 # Check if user wants to exit before finish.
-trap exit_script INT
+trap exit_script INT TERM
+trap "kill 0" EXIT
+
+# Sudo loop.
+sudo -v || exit $?
+sleep 1
+while true; do
+  sleep 60
+  sudo -nv
+done 2>/dev/null &
 
 # Dialog util.
 dialog_box () {
