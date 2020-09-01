@@ -197,7 +197,7 @@ sudo reflector --verbose --sort rate --protocol https --age 12 \
 sudo pacman -Syy archlinux-keyring --noconfirm
 
 # Run upgrade, just in case.
-sudo pacman -Syu
+sudo pacman -Syu --noconfirm
 
 
 ###################################
