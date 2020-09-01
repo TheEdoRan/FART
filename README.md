@@ -5,7 +5,7 @@
 On a (preferably) freshly installed system, run:
 
 ```
-curl -sL bit.ly/fart-installer | bash
+bash <(curl -sSL bit.ly/fart-installer)
 ```
 
 <hr>
