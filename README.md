@@ -4,8 +4,8 @@
 
 On a (preferably) freshly installed system, run:
 
-```
-bash <(curl -sSL bit.ly/fart-installer)
+```bash
+bash -c "$(curl -sSL bit.ly/fart-installer)"
 ```
 
 <hr>
