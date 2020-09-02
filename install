@@ -463,3 +463,15 @@ pms $(echo "$LOCALE_MODULES" | xargs)
 
 # Finished installing.
 echo -e "\nFinished ${CYAN}Arch Linux${NC} post-installation!"
+
+sleep 2
+
+# Ask for reboot and for FART cloning.
+dialog_box --yesno "Installation completed!\n\nDo you want to reboot the machine now?"
+
+# If user chose to not reboot the machine.
+if [ "$?" == 1 ]; then
+  clear
+else
+  reboot -f
+fi
