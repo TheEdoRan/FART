@@ -466,5 +466,5 @@ dialog_box --yesno "Installation completed!\n\nDo you want to reboot the machine
 if [ "$?" == 1 ]; then
   clear
 else
-  reboot -f
+  sudo reboot -f
 fi
