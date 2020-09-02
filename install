@@ -23,7 +23,6 @@ alias yys='yay -S --needed --noconfirm --sudoloop'
 # Init global variables.
 INSTALL_MODULES=""
 LOCALE_MODULES=""
-INSTALL_YAY=true
 
 
 ###################################
@@ -139,12 +138,6 @@ dialog_locale () {
 dialog_box --msgbox "\nWelcome to FART, the one and only Fastest Arch Real \
 Timesaver installer.\n\nIn the next steps, you'll need to select which packages \
 you want to install for your system."
-
-# Ask for yay installation.
-dialog_box --yesno "\nDo you want to install yay, for easier AUR management?"
-
-# Check output for previous command, set yay installation variable accordingly.
-[ "$?" == 1 ] && INSTALL_YAY=false
 
 # Show checklist for base modules.
 dialog_modules "base"
@@ -445,8 +438,8 @@ echo -e "Starting ${CYAN}Arch Linux${NC} post-installation!"
 
 sleep 2
 
-# Install yay, if user wants it and if not found on the system.
-[ "${INSTALL_YAY}" = true ] && [ ! -x "$(command -v yay)" ] \
+# If yay is not found on the system, install it.
+[ ! -x "$(command -v yay)" ] \
   && pms git && git clone https://aur.archlinux.org/yay.git && cd yay/ \
   && makepkg -si --noconfirm && cd .. && rm -rf yay/
 
