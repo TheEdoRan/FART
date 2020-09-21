@@ -248,7 +248,7 @@ i3 () {
 }
 
 gnome () {
-  pms gnome gnome-tweaks dconf-editor chrome-gnome-shell
+  pms gnome gnome-tweaks dconf-editor chrome-gnome-shell flameshot
 
   sudo systemctl enable gdm
 }
