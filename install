@@ -255,7 +255,7 @@ gnome () {
 
 kde_plasma () {
   pms sddm plasma powerdevil konsole kate kcalc kio kio-extras kio-gdrive ark \
-    dolphin dolphin-plugins gwenview kamoso kdeconnect okular yakuake \
+    dolphin dolphin-plugins gwenview kamoso kdeconnect okular yakuake flameshot \
     breeze breeze-gtk breeze-icons
 
   sudo systemctl enable sddm
