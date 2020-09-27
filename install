@@ -64,8 +64,8 @@ dialog_modules () {
     "base")
       MODULES=("Base|on" "Intel|off" "AMD|off" "NVIDIA|off" "i3|off" "GNOME|on" \
         "KDE_Plasma|off" "Fonts|on" "Printing|on" "UFW|on" "DNSCrypt|off" \
-        "Fish|off" "Tmux|off" "Neovim|on" "VS_Code|off" "Thunderbird|on" "Brave|off" \
-        "Firefox|on" "Chromium|off" "Adapta_Theme|off" "Papirus_Icons|on" \
+        "Fish|off" "Tmux|off" "Neovim|on" "VS_Code|off" "Thunderbird|on" \
+        "Chromium|on" "Firefox|off" "Brave|off" "Adapta_Theme|off" "Papirus_Icons|on" \
         "QEMU|off" "VirtualBox|off" "Authy|off" "Bitwarden|off" "Telegram|off" \
         "Discord|off" "Krita|off" "GIMP|off" "Inkscape|off" "Kdenlive|off" \
         "Audacity|on" "Rhythmbox|on" "Spotify|off" "LibreOffice|on")
@@ -329,6 +329,7 @@ firefox () {
 
 chromium () {
   pms chromium
+  yys chromium-widevine
 }
 
 adapta_theme () {
