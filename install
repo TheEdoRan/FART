@@ -312,7 +312,7 @@ neovim () {
 }
 
 vs_code () {
-  pms code
+  yys visual-studio-code-bin
 }
 
 thunderbird () {
