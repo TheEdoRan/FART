@@ -353,7 +353,7 @@ virtualbox () {
 }
 
 authy () {
-  yys authy-snap
+  yys authy
 }
 
 bitwarden () {
@@ -393,8 +393,7 @@ rhythmbox () {
 }
 
 spotify () {
-  yys spotify-dev
-}
+  yys --mflags --skipinteg spotify-dev
 
 libreoffice () {
   pms libreoffice-fresh
