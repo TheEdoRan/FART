@@ -62,13 +62,14 @@ dialog_box () {
 dialog_modules () {
   case "$1" in
     "base")
-      MODULES=("Base|on" "Intel|off" "AMD|off" "NVIDIA|off" "i3|off" "GNOME|on" \
-        "KDE_Plasma|off" "Fonts|on" "Printing|on" "UFW|on" "DNSCrypt|off" \
-        "Fish|off" "Tmux|off" "Neovim|on" "VS_Code|off" "Thunderbird|on" \
-        "Chromium|on" "Firefox|off" "Brave|off" "Adapta_Theme|off" "Papirus_Icons|on" \
-        "QEMU|off" "VirtualBox|off" "Authy|off" "Bitwarden|off" "Telegram|off" \
-        "Discord|off" "Krita|off" "GIMP|off" "Inkscape|off" "Kdenlive|off" \
-        "Audacity|on" "Rhythmbox|on" "Spotify|off" "LibreOffice|on")
+      MODULES=("Base|on" "Xorg|on" "PulseAudio|on" "Intel|off" "AMD|off" \
+       "NVIDIA|off" "i3|off" "GNOME|on" "KDE_Plasma|off" "Fonts|on" \
+       "Printing|on" "UFW|on" "DNSCrypt|off" "Fish|off" "Tmux|off" "Neovim|on" \
+       "VS_Code|off" "Thunderbird|on" "Chromium|on" "Firefox|off" "Brave|off" \
+       "Adapta_Theme|off" "Papirus_Icons|on" "QEMU|off" "VirtualBox|off" \
+       "Authy|off" "Bitwarden|off" "Telegram|off" "Discord|off" "Krita|off" \
+       "GIMP|off" "Inkscape|off" "Kdenlive|off" "Audacity|on" "Rhythmbox|on" \
+       "Spotify|off" "LibreOffice|on")
       ;;
     "laptop")
       MODULES=("NVIDIA_Prime|on" "TLP|on" "Intel_Undervolt|on" "Libinput_Gestures|on")
@@ -203,10 +204,9 @@ sudo pacman -Syu --noconfirm
 
 
 base () {
-  pms bash-completion pacman-contrib xorg xorg-xinit xorg-xrandr xorg-xset \
-      autorandr xsettingsd htop libinput xdg-utils xdg-user-dirs alsa \
-      alsa-utils pulseaudio pulseaudio-alsa accountsservice ntfs-3g \
-      libdbusmenu-gtk2 libdbusmenu-gtk3 libdbusmenu-qt5 libcanberra \
+  pms bash-completion pacman-contrib autorandr xsettingsd htop libinput \
+      xdg-utils xdg-user-dirs alsa alsa-utils accountsservice ntfs-3g \
+      libdbusmenu-gtk2 libdbusmenu-gtk3 libdbusmenu-qt5 libcanberra \ 
       libcanberra-gstreamer libcanberra-pulse samba p7zip unrar \
       unzip zip gstreamer gst-{libav,plugins-{bad,base,good,ugly}} \
       gstreamer-vaapi neofetch lame twolame flac wavpack celt a52dec libdca \
@@ -214,11 +214,19 @@ base () {
       fdkaac jasper libwebp aom dav1d schroedinger libdv x265 libde265 x264 \
       libmpeg2 xvidcore libtheora libvpx git wget curl playerctl youtube-dl \
       gnome-disk-utility trash-cli transmission-gtk rsync ripgrep fzf cronie \
-      exa bat imagemagick xdotool wmctrl lm_sensors pkgfile xclip python-pip
+      exa bat imagemagick lm_sensors pkgfile python-pip
 
   # Sync clock.
   sudo hwclock --systohc
   sudo timedatectl set-ntp true
+}
+
+xorg () {
+  pms xorg xorg-xinit xorg-xrandr xorg-xset xclip xdotool wmctrl
+}
+
+pulseaudio () {
+  pms pulseaudio pulseaudio-alsa
 }
 
 intel () {
@@ -238,7 +246,7 @@ i3 () {
       feh eog mpv brightnessctl redshift pcmanfm flameshot lightdm \
       light-locker lxappearance-gtk3 qt5ct kvantum-qt5 lxqt-policykit \
       gnome-keyring network-manager-applet python-pyxdg xdo inotify-tools \
-      xarchiver kitty kitty-terminfo
+      xarchiver kitty kitty-terminfo xsettingsd
 
   yys lightdm-slick-greeter dunst-git autotiling menu-calc
 
@@ -459,7 +467,7 @@ echo -e "\nFinished ${CYAN}Arch Linux${NC} post-installation!"
 
 sleep 2
 
-# Ask for reboot and for FART cloning.
+# Ask for reboot.
 dialog_box --yesno "Installation completed!\n\nDo you want to reboot the machine now?"
 
 # If user chose to not reboot the machine.
