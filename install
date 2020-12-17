@@ -206,7 +206,7 @@ sudo pacman -Syu --noconfirm
 base () {
   pms bash-completion pacman-contrib autorandr xsettingsd htop libinput \
       xdg-utils xdg-user-dirs alsa alsa-utils accountsservice ntfs-3g \
-      libdbusmenu-gtk2 libdbusmenu-gtk3 libdbusmenu-qt5 libcanberra \ 
+      libdbusmenu-gtk2 libdbusmenu-gtk3 libdbusmenu-qt5 libcanberra \
       libcanberra-gstreamer libcanberra-pulse samba p7zip unrar \
       unzip zip gstreamer gst-{libav,plugins-{bad,base,good,ugly}} \
       gstreamer-vaapi neofetch lame twolame flac wavpack celt a52dec libdca \
@@ -402,6 +402,7 @@ rhythmbox () {
 
 spotify () {
   yys --mflags --skipinteg spotify-dev
+}
 
 libreoffice () {
   pms libreoffice-fresh
