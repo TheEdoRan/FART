@@ -267,7 +267,8 @@ i3 () {
 }
 
 gnome () {
-  pms gnome gnome-tweaks dconf-editor chrome-gnome-shell flameshot
+  pms gnome gnome-tweaks dconf-editor chrome-gnome-shell flameshot qt5ct kvantum-qt5 \
+      flameshot
 
   sudo systemctl enable gdm
 }
