@@ -62,8 +62,8 @@ dialog_box () {
 dialog_modules () {
   case "$1" in
     "base")
-      MODULES=("Base|on" "Xorg|on" "PulseAudio|on" "Intel|off" "AMD|off" \
-       "NVIDIA|off" "i3|off" "GNOME|on" "KDE_Plasma|off" "Fonts|on" \
+      MODULES=("Base|on" "Flatpak|on" "Snap|on" "Xorg|on" "PulseAudio|on" \
+       "Intel|off" "AMD|off" "NVIDIA|off" "i3|off" "GNOME|on" "KDE_Plasma|off" "Fonts|on" \
        "Printing|on" "UFW|on" "DNSCrypt|off" "Fish|off" "Tmux|off" "Neovim|on" \
        "VS_Code|off" "Thunderbird|on" "Chromium|on" "Firefox|off" "Brave|off" \
        "Adapta_Theme|off" "Papirus_Icons|on" "QEMU|off" "VirtualBox|off" \
@@ -219,6 +219,17 @@ base () {
   # Sync clock.
   sudo hwclock --systohc
   sudo timedatectl set-ntp true
+}
+
+flatpak () {
+  pms flatpak
+}
+
+snap () {
+  yys snapd
+  sudo systemctl enable apparmor.service
+  sudo systemctl enable snapd.apparmor.service
+  sudo systemctl enable snapd.socket
 }
 
 xorg () {
