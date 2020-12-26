@@ -283,7 +283,7 @@ kde_plasma () {
 
 xfce () {
   pms xfce4 xfce4-goodies mousepad flameshot qt5ct kvantum-qt5 materia-gtk-theme \
-    kvantum-theme-materia lightdm lightdm-gtk-greeter albert
+    kvantum-theme-materia lightdm lightdm-gtk-greeter albert network-manager-applet
 
   sudo systemctl enable lightdm
 }
