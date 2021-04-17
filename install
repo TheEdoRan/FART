@@ -62,17 +62,17 @@ dialog_box () {
 dialog_modules () {
   case "$1" in
     "base")
-      MODULES=("Base|on" "Flatpak|on" "Snap|on" "Xorg|on" "PulseAudio|on" \
+      MODULES=("Base|on" "Flatpak|on" "Snap|on" "Xorg|on" "Pipewire|on" \
        "Intel|off" "AMD|off" "NVIDIA|off" "i3|off" "GNOME|off" "KDE_Plasma|off" \
        "XFCE|off" "Fonts|on" "Printing|on" "UFW|on" "DNSCrypt|off" "Fish|off" \
-       "Tmux|off" "Neovim|on" "VS_Code|off" "Thunderbird|on" "Chromium|on" \
-       "Firefox|off" "Brave|off" "Adapta_Theme|off" "Papirus_Icons|on" "QEMU|off"\
+       "Tmux|off" "Neovim|on" "VS_Code|off" "Thunderbird|off" "Chromium|on" \
+       "Firefox|on" "Brave|off" "Adapta_Theme|off" "Papirus_Icons|on" "QEMU|off"\
        "VirtualBox|off" "Authy|off" "Bitwarden|off" "Telegram|off" "Discord|off"\
        "Krita|off" "GIMP|off" "Inkscape|off" "Kdenlive|off" "Audacity|on" "Rhythmbox|on" \
-       "Spotify|off" "LibreOffice|on")
+       "LibreOffice|on")
       ;;
     "laptop")
-      MODULES=("NVIDIA_Prime|on" "TLP|on" "Intel_Undervolt|on" "Libinput_Gestures|on")
+      MODULES=("NVIDIA_Prime|off" "TLP|on" "Touchegg|on")
       ;;
   esac
 
@@ -214,7 +214,7 @@ base () {
       fdkaac jasper libwebp aom dav1d schroedinger libdv x265 libde265 x264 \
       libmpeg2 xvidcore libtheora libvpx git wget curl playerctl youtube-dl \
       gnome-disk-utility trash-cli transmission-gtk rsync ripgrep fzf cronie \
-      exa bat imagemagick lm_sensors pkgfile python-pip
+      exa imagemagick lm_sensors pkgfile python-pip
 
   # Sync clock.
   sudo hwclock --systohc
@@ -236,8 +236,8 @@ xorg () {
   ins xorg xorg-xinit xorg-xrandr xorg-xset xclip xdotool wmctrl
 }
 
-pulseaudio () {
-  ins pulseaudio pulseaudio-alsa
+pipewire () {
+  ins pipewire pipewire-alsa pipewire-pulse
 }
 
 intel () {
@@ -255,15 +255,14 @@ nvidia () {
 i3 () {
   ins i3-gaps i3blocks i3status i3lock-color xorg-xrdb python-i3ipc picom arandr \
       feh eog mpv brightnessctl redshift pcmanfm flameshot lightdm \
-      light-locker lxappearance-gtk3 qt5ct kvantum-qt5 lxqt-policykit \
-      gnome-keyring network-manager-applet python-pyxdg xdo inotify-tools \
-      xarchiver kitty kitty-terminfo xsettingsd
+      lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker \
+      lxappearance-gtk3 qt5ct kvantum-qt5 lxqt-policykit gnome-keyring \
+      network-manager-applet python-pyxdg xdo inotify-tools xarchiver alacritty \
+      xsettingsd
 
-  ains lightdm-slick-greeter dunst-git autotiling menu-calc
+  ains dunst-git autotiling menu-calc
 
   sudo systemctl enable lightdm
-
-  sudo sed -i 's/^#greeter-session=example-gtk-gnome/greeter-session=lightm-slick-greeter/' /etc/lightm/lightdm.conf
 }
 
 gnome () {
@@ -305,7 +304,7 @@ printing () {
 
   ains epson-inkjet-printer-escpr epson-inkjet-printer-escpr2
 
-  sudo systemctl enable org.cups.cupsd
+  sudo systemctl enable cups
 }
 
 ufw () {
@@ -329,17 +328,11 @@ tmux () {
 }
 
 neovim () {
-  ins neovim python-pynvim nodejs npm python ctags bash-language-server \
-      jdk-openjdk jre-openjdk ripgrep
-
-  ains nodejs-neovim
-
-  # pnpm install.
-  curl -L https://raw.githubusercontent.com/pnpm/self-installer/master/install.js | node
+  ains neovim-nightly-bin
 }
 
 vs_code () {
-  ains visual-studio-code-bin
+  ins code
 }
 
 thunderbird () {
@@ -419,10 +412,6 @@ rhythmbox () {
   ins rhythmbox
 }
 
-spotify () {
-  ains --mflags --skipinteg spotify-dev
-}
-
 libreoffice () {
   ins libreoffice-fresh
 }
@@ -442,10 +431,8 @@ tlp () {
   sudo tlp start
 }
 
-intel_undervolt () {
-  ains intel-undervolt
-
-  sudo systemctl enable intel-undervolt
+touchegg () {
+  ains touchegg touche
 }
 
 libinput_gestures () {
