@@ -16,9 +16,9 @@ RED='\033[0;31m'
 # Expand aliases in script.
 shopt -s expand_aliases
 
-# Setup pacman and yay aliases.
-alias pms='sudo pacman -S --needed --noconfirm'
-alias yys='yay -S --needed --noconfirm --sudoloop'
+# Setup pacman and paru aliases (install and AUR install).
+alias ins='sudo pacman -S --needed --noconfirm'
+alias ains='paru -S --needed --noconfirm --sudoloop'
 
 # Init global variables.
 INSTALL_MODULES=""
@@ -50,7 +50,7 @@ done 2>/dev/null &
 # Check if dialog is installed on the system.
 if [ ! -x "$(command -v dialog)" ]; then
   echo 'dialog not found. Proceeding to install it.'
-  pms dialog
+  ins dialog
 fi
 
 # Dialog util.
@@ -204,7 +204,7 @@ sudo pacman -Syu --noconfirm
 
 
 base () {
-  pms bash-completion pacman-contrib autorandr xsettingsd htop libinput \
+  ins bash-completion pacman-contrib autorandr xsettingsd htop libinput \
       xdg-utils xdg-user-dirs alsa alsa-utils accountsservice ntfs-3g \
       libdbusmenu-gtk2 libdbusmenu-gtk3 libdbusmenu-qt5 libcanberra \
       libcanberra-gstreamer libcanberra-pulse samba p7zip unrar \
@@ -222,44 +222,44 @@ base () {
 }
 
 flatpak () {
-  pms flatpak
+  ins flatpak
 }
 
 snap () {
-  yys snapd
+  ains snapd
   sudo systemctl enable apparmor.service
   sudo systemctl enable snapd.apparmor.service
   sudo systemctl enable snapd.socket
 }
 
 xorg () {
-  pms xorg xorg-xinit xorg-xrandr xorg-xset xclip xdotool wmctrl
+  ins xorg xorg-xinit xorg-xrandr xorg-xset xclip xdotool wmctrl
 }
 
 pulseaudio () {
-  pms pulseaudio pulseaudio-alsa
+  ins pulseaudio pulseaudio-alsa
 }
 
 intel () {
-  pms intel-media-driver vulkan-intel
+  ins intel-media-driver vulkan-intel
 }
 
 amd () {
-  pms mesa libva-mesa-driver mesa-vdpau vulkan-radeon
+  ins mesa libva-mesa-driver mesa-vdpau vulkan-radeon
 }
 
 nvidia () {
-  pms nvidia nvidia-utils nvidia-settings
+  ins nvidia nvidia-utils nvidia-settings
 }
 
 i3 () {
-  pms i3-gaps i3blocks i3status i3lock-color xorg-xrdb python-i3ipc picom arandr \
+  ins i3-gaps i3blocks i3status i3lock-color xorg-xrdb python-i3ipc picom arandr \
       feh eog mpv brightnessctl redshift pcmanfm flameshot lightdm \
       light-locker lxappearance-gtk3 qt5ct kvantum-qt5 lxqt-policykit \
       gnome-keyring network-manager-applet python-pyxdg xdo inotify-tools \
       xarchiver kitty kitty-terminfo xsettingsd
 
-  yys lightdm-slick-greeter dunst-git autotiling menu-calc
+  ains lightdm-slick-greeter dunst-git autotiling menu-calc
 
   sudo systemctl enable lightdm
 
@@ -267,14 +267,14 @@ i3 () {
 }
 
 gnome () {
-  pms gnome gnome-tweaks dconf-editor chrome-gnome-shell flameshot qt5ct kvantum-qt5 \
+  ins gnome gnome-tweaks dconf-editor chrome-gnome-shell flameshot qt5ct kvantum-qt5 \
       flameshot
 
   sudo systemctl enable gdm
 }
 
 kde_plasma () {
-  pms sddm plasma powerdevil konsole kate kcalc kio kio-extras kio-gdrive ark \
+  ins sddm plasma powerdevil konsole kate kcalc kio kio-extras kio-gdrive ark \
     dolphin dolphin-plugins gwenview kamoso kdeconnect okular flameshot \
     breeze breeze-gtk breeze-icons
 
@@ -282,93 +282,93 @@ kde_plasma () {
 }
 
 xfce () {
-  pms xfce4 xfce4-goodies mousepad flameshot qt5ct kvantum-qt5 materia-gtk-theme \
+  ins xfce4 xfce4-goodies mousepad flameshot qt5ct kvantum-qt5 materia-gtk-theme \
     kvantum-theme-materia lightdm lightdm-gtk-greeter albert network-manager-applet
 
   sudo systemctl enable lightdm
 }
 
 fonts () {
-  pms ttf-opensans ttf-bitstream-vera ttf-croscore ttf-font-awesome ttf-hack \
+  ins ttf-opensans ttf-bitstream-vera ttf-croscore ttf-font-awesome ttf-hack \
       ttf-liberation ttf-ubuntu-font-family cantarell-fonts noto-fonts \
       noto-fonts-cjk noto-fonts-emoji
 
-  yys nerd-fonts-hack
+  ains nerd-fonts-hack
 
   sudo fc-cache -f
 }
 
 printing () {
-  pms cups cups-filters cups-pdf ghostscript gsfonts foomatic-db-engine \
+  ins cups cups-filters cups-pdf ghostscript gsfonts foomatic-db-engine \
       foomatic-db-ppds foomatic-db-nonfree-ppds gutenprint \
       foomatic-db-gutenprint-ppds
 
-  yys epson-inkjet-printer-escpr epson-inkjet-printer-escpr2
+  ains epson-inkjet-printer-escpr epson-inkjet-printer-escpr2
 
   sudo systemctl enable org.cups.cupsd
 }
 
 ufw () {
-  pms ufw
+  ins ufw
 
   sudo systemctl enable ufw
 }
 
 dnscrypt () {
-  pms dnscrypt-proxy
+  ins dnscrypt-proxy
 
   sudo systemctl enable dnscrypt-proxy
 }
 
 fish () {
-  pms fish
+  ins fish
 }
 
 tmux () {
-  pms tmux
+  ins tmux
 }
 
 neovim () {
-  pms neovim python-pynvim nodejs npm python ctags bash-language-server \
+  ins neovim python-pynvim nodejs npm python ctags bash-language-server \
       jdk-openjdk jre-openjdk ripgrep
 
-  yys nodejs-neovim
+  ains nodejs-neovim
 
   # pnpm install.
   curl -L https://raw.githubusercontent.com/pnpm/self-installer/master/install.js | node
 }
 
 vs_code () {
-  yys visual-studio-code-bin
+  ains visual-studio-code-bin
 }
 
 thunderbird () {
-  pms thunderbird
+  ins thunderbird
 }
 
 brave () {
-  yys brave-bin
+  ains brave-bin
 }
 
 firefox () {
-  pms firefox
+  ins firefox
 }
 
 chromium () {
-  pms chromium
-  yys chromium-widevine
+  ins chromium
+  ains chromium-widevine
 }
 
 adapta_theme () {
-  pms adapta-gtk-theme
+  ins adapta-gtk-theme
 }
 
 papirus_icons () {
-  pms papirus-icon-theme
+  ins papirus-icon-theme
 }
 
 qemu () {
-  pms libvirt qemu qemu-arch-extra qemu-block-gluster qemu-block-iscsi \
+  ins libvirt qemu qemu-arch-extra qemu-block-gluster qemu-block-iscsi \
       qemu-block-rbd ovmf virt-manager dnsmasq ebtables dmidecode
 
   sudo systemctl enable libvirtd
@@ -376,55 +376,55 @@ qemu () {
 }
 
 virtualbox () {
-  pms virtualbox virtualbox-guest-iso virtualbox-host-dkms
+  ins virtualbox virtualbox-guest-iso virtualbox-host-dkms
 }
 
 authy () {
-  yys authy
+  ains authy
 }
 
 bitwarden () {
-  yys bitwarden-bin
+  ains bitwarden-bin
 }
 
 telegram () {
-  pms telegram-desktop
+  ins telegram-desktop
 }
 
 discord () {
-  pms discord
+  ins discord
 }
 
 krita () {
-  pms krita
+  ins krita
 }
 
 gimp () {
-  pms gimp
+  ins gimp
 }
 
 inkscape () {
-  pms inkscape
+  ins inkscape
 }
 
 kdenlive () {
-  pms kdenlive ffmpeg opencv
+  ins kdenlive ffmpeg opencv
 }
 
 audacity () {
-  pms audacity
+  ins audacity
 }
 
 rhythmbox () {
-  pms rhythmbox
+  ins rhythmbox
 }
 
 spotify () {
-  yys --mflags --skipinteg spotify-dev
+  ains --mflags --skipinteg spotify-dev
 }
 
 libreoffice () {
-  pms libreoffice-fresh
+  ins libreoffice-fresh
 }
 
 
@@ -432,24 +432,24 @@ libreoffice () {
 
 
 nvidia_prime () {
-  pms nvidia-prime
+  ins nvidia-prime
 }
 
 tlp () {
-  pms tlp
+  ins tlp
 
   sudo systemctl enable tlp
   sudo tlp start
 }
 
 intel_undervolt () {
-  yys intel-undervolt
+  ains intel-undervolt
 
   sudo systemctl enable intel-undervolt
 }
 
 libinput_gestures () {
-  yys libinput-gestures
+  ains libinput-gestures
 
   # Add user to INPUT group.
   sudo gpasswd -a $USER input
@@ -466,10 +466,10 @@ echo -e "Starting ${CYAN}Arch Linux${NC} post-installation!"
 
 sleep 2
 
-# If yay is not found on the system, install it.
-[ ! -x "$(command -v yay)" ] \
-  && pms git && git clone https://aur.archlinux.org/yay.git && cd yay/ \
-  && makepkg -si --noconfirm && cd .. && rm -rf yay/
+# If paru is not found on the system, install it.
+[ ! -x "$(command -v paru)" ] \
+  && ins git && git clone https://aur.archlinux.org/paru.git && cd paru/ \
+  && makepkg -si --noconfirm && cd .. && rm -rf paru/
 
 # Convert to array.
 INSTALL_MODULES=($INSTALL_MODULES)
@@ -480,7 +480,7 @@ for module in "${INSTALL_MODULES[@]}"; do
 done
 
 # Proceed to install locale packages.
-pms $(echo "$LOCALE_MODULES" | xargs)
+ins $(echo "$LOCALE_MODULES" | xargs)
 
 # Finished installing.
 echo -e "\nFinished ${CYAN}Arch Linux${NC} post-installation!"
