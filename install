@@ -295,7 +295,7 @@ fonts () {
       ttf-liberation ttf-ubuntu-font-family cantarell-fonts noto-fonts \
       noto-fonts-cjk noto-fonts-emoji
 
-  ains nerd-fonts-hack
+  ains nerd-fonts-hack ttf-ms-win10-auto
 
   sudo fc-cache -f
 }
