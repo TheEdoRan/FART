@@ -62,11 +62,11 @@ dialog_box () {
 dialog_modules () {
   case "$1" in
     "base")
-      MODULES=("Base|on" "Flatpak|on" "Snap|off" "Xorg|on" "Pipewire|on" \
+      MODULES=("Base|on" "Flatpak|on" "Snap|off" "Xorg|on" "PipeWire|on" \
        "Intel|off" "AMD|off" "NVIDIA|off" "i3|off" "GNOME|off" "KDE_Plasma|off" \
        "XFCE|off" "Fonts|on" "Printing|on" "UFW|off" "DNSCrypt|off" "Fish|off" \
        "Tmux|off" "Neovim|on" "VS_Code|off" "Thunderbird|off" "Chromium|off" \
-       "Firefox|on" "Brave|off" "Adapta_Theme|off" "Papirus_Icons|on" "QEMU|off"\
+       "Firefox|on" "Brave|off" "Materia_Theme|off" "Papirus_Icons|on" "QEMU|off"\
        "VirtualBox|off" "Authy|off" "Bitwarden|off" "Telegram|off" "Discord|off"\
        "Krita|off" "GIMP|off" "Inkscape|off" "Kdenlive|off" "Audacity|off" "Rhythmbox|off" \
        "LibreOffice|on")
@@ -284,8 +284,8 @@ kde_plasma () {
 }
 
 xfce () {
-  ins xfce4 xfce4-goodies mousepad flameshot qt5ct kvantum-qt5 materia-gtk-theme \
-    kvantum-theme-materia lightdm lightdm-gtk-greeter albert network-manager-applet
+  ins xfce4 xfce4-goodies mousepad flameshot qt5ct kvantum-qt5 \
+    lightdm lightdm-gtk-greeter albert network-manager-applet
 
   sudo systemctl enable lightdm
 }
@@ -355,8 +355,8 @@ chromium () {
   ains chromium-widevine
 }
 
-adapta_theme () {
-  ins adapta-gtk-theme
+materia_theme () {
+  ins materia-gtk-theme kvantum-theme-materia
 }
 
 papirus_icons () {
