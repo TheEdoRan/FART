@@ -258,7 +258,7 @@ i3 () {
       lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker pavucontrol \
       pamixer lxappearance-gtk3 qt5ct kvantum-qt5 lxqt-policykit \
       gnome-keyring network-manager-applet xdo inotify-tools \
-      xarchiver alacritty xsettingsd rofi
+      xarchiver alacritty xsettingsd rofi gvfs
 
   ains dunst-git autotiling menu-calc
 
