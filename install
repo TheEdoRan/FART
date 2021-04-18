@@ -258,9 +258,9 @@ i3 () {
       lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker pavucontrol \
       pamixer lxappearance-gtk3 qt5ct kvantum-qt5 lxqt-policykit \
       gnome-keyring network-manager-applet xdo inotify-tools \
-      xarchiver alacritty xsettingsd rofi rofi-calc
+      xarchiver alacritty xsettingsd rofi
 
-  ains dunst-git autotiling
+  ains dunst-git autotiling menu-calc
 
   # Create user folders
   xdg-user-dirs-update
