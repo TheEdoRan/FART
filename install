@@ -262,6 +262,9 @@ i3 () {
 
   ains dunst-git autotiling
 
+  # Create user folders
+  xdg-user-dirs-update
+
   sudo systemctl enable lightdm
 }
 
