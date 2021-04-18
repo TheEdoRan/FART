@@ -253,14 +253,14 @@ nvidia () {
 }
 
 i3 () {
-  ins i3-gaps i3blocks i3status xorg-xrdb python-i3ipc picom arandr dmenu \
+  ins i3-gaps i3blocks i3status xorg-xrdb python-i3ipc picom arandr \
       feh eog mpv brightnessctl redshift pcmanfm flameshot lightdm acpi \
       lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker pavucontrol \
       pamixer lxappearance-gtk3 qt5ct kvantum-qt5 lxqt-policykit \
-      gnome-keyring network-manager-applet python-pyxdg xdo inotify-tools \
-      xarchiver alacritty xsettingsd
+      gnome-keyring network-manager-applet xdo inotify-tools \
+      xarchiver alacritty xsettingsd rofi rofi-calc
 
-  ains dunst-git autotiling menu-calc
+  ains dunst-git autotiling
 
   sudo systemctl enable lightdm
 }
