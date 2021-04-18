@@ -256,7 +256,7 @@ i3 () {
   ins i3-gaps i3blocks i3status xorg-xrdb python-i3ipc picom arandr dmenu \
       feh eog mpv brightnessctl redshift pcmanfm flameshot lightdm acpi \
       lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker pavucontrol \
-      imwheel pamixer lxappearance-gtk3 qt5ct kvantum-qt5 lxqt-policykit \
+      pamixer lxappearance-gtk3 qt5ct kvantum-qt5 lxqt-policykit \
       gnome-keyring network-manager-applet python-pyxdg xdo inotify-tools \
       xarchiver alacritty xsettingsd
 
