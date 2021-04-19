@@ -336,6 +336,7 @@ neovim () {
 
 vs_code () {
   ins code
+  ains code-marketplace
 }
 
 thunderbird () {
