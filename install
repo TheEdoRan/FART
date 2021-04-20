@@ -436,6 +436,8 @@ tlp () {
 
 touchegg () {
   ains touchegg touche
+
+  sudo systemctl enable touchegg
 }
 
 libinput_gestures () {
