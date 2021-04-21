@@ -388,7 +388,7 @@ telegram () {
 }
 
 discord () {
-  ins discord
+  ains discord_arch_electron
 }
 
 krita () {
